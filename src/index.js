@@ -10,16 +10,23 @@ import { logging } from './utils/logging'
 export const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, '../public')))
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
+
 
 
 app.use(publicRouter)
 app.use(router)
 app.use(errorMiddleware)
 
+app.use((req, res) => {
+   return res.status(404).json({
+        status: 404,
+        message: 'Not Found',
+        data: null
+    });
+});
 
-
-// connection.end()
 
 
 

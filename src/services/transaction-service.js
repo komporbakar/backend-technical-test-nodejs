@@ -1,5 +1,6 @@
 import { dbPool } from "../database";
 import { ResponseError } from "../error/response-error";
+import { convertToPlus7 } from "../utils/convertTime";
 import { datenow } from "../utils/date";
 import { TransactionValidation } from "../validation/transaction-validation";
 import { Validation } from "../validation/validation";
@@ -10,7 +11,6 @@ export class TrasnsactionService {
       `SELECT amount FROM balance WHERE user_id = ?`,
       [req.user.id]
     );
-    console.log(result[0]);
 
     return result[0][0];
   }
@@ -44,7 +44,6 @@ export class TrasnsactionService {
       `SELECT amount FROM balance WHERE user_id = ?`,
       [req.user.id]
     );
-    console.log(result[0][0]);
     return result[0][0];
   }
 
@@ -63,7 +62,6 @@ export class TrasnsactionService {
     if (checkService[0].length < 1) {
       throw new ResponseError(400, 102, "Service atau Layanan tidak ditemukan");
     }
-    console.log(checkService[0][0]);
 
     const checkBalance = await dbPool.query(
       `SELECT amount FROM balance WHERE user_id = ?`,[req.user.id]
@@ -72,13 +70,11 @@ export class TrasnsactionService {
      if((checkBalance[0][0].amount - checkService[0][0].service_tariff) < 0){
         throw new ResponseError(400, 102, "Saldo anda tidak mencukupi")
     }
-    const updateBalance = await dbPool.query(
+     await dbPool.query(
       `UPDATE balance SET amount = amount - ? WHERE user_id = ?`, [checkService[0][0].service_tariff, req.user.id],
-    )
-    console.log(updateBalance)
-   
+    )   
 
-    const create = await dbPool.query(
+    await dbPool.query(
       `INSERT INTO transaction (user_id, invoice_number, transaction_type , description, total_amount, created_on) VALUES (?, ?, ?, ?, ?, ?)`,
       [
         req.user.id,
@@ -89,14 +85,20 @@ export class TrasnsactionService {
         new Date(),
       ]
     );
-    console.log(create);
+
+    const getTransaction = await dbPool.query(
+      `SELECT * FROM transaction WHERE invoice_number = ?`,[invoice]
+    )
+
+    const data = getTransaction[0][0]
+
     return {
-      invoice_number: invoice,
+      invoice_number: data.invoice_number,
       service_code: transactionRequest.service_code,
-      service_name: checkService[0][0].service_name,
-      transaction_type: "PAYMENT",
-      total_amount: checkService[0][0].service_tariff,
-      created_on: new Date(),
+      service_name: data.description,
+      transaction_type: data.transaction_type,
+      total_amount: data.total_amount,
+      created_on: convertToPlus7(data.created_on),
     };
   }
 
@@ -104,12 +106,14 @@ export class TrasnsactionService {
     const limit = request.limit;
     const offset = request.offset;
     const result = await dbPool.query(
-      `SELECT invoice_number, transaction_type, description, total_amount, created_on FROM transaction WHERE user_id = ? ${
+      `SELECT invoice_number, transaction_type, description, total_amount, created_on FROM transaction WHERE user_id = ? ORDER BY created_on DESC ${
         limit ? `LIMIT ${limit}` : ""
       } ${offset ? `OFFSET ${offset}` : ""} `,
       [req.user.id]
     );
-    console.log(result[0].length);
+    result[0].forEach((item) => {
+      item.created_on = convertToPlus7(item.created_on);
+    })
     result[0].offset = offset;
     return result[0];
   }

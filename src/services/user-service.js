@@ -1,7 +1,10 @@
 import bcrypt from 'bcrypt';
+import fs from 'fs';
+import { config } from '../config';
 import { dbPool } from "../database";
 import { ResponseError } from "../error/response-error";
 import { createJWT, createToken } from '../utils/jsonWebToken';
+import { logging } from '../utils/logging';
 import { UserValidation } from "../validation/user-validation";
 import { Validation } from "../validation/validation";
 
@@ -65,7 +68,7 @@ export class UserService {
         email: rows[0].email,
         first_name: rows[0].first_name,
         last_name: rows[0].last_name,
-        profile_image: rows[0].profile_image
+        profile_image: `${config.BASE_URL}/${rows[0].profile_image}`
       }
 
       return data
@@ -76,7 +79,7 @@ export class UserService {
       UserValidation.UPDATE,
       request
     );
-    const [rows, field] = await dbPool.query(
+    const [rows] = await dbPool.query(
       `UPDATE users SET first_name = ?, last_name = ? WHERE email = ?`,
       [updateRequest.first_name, updateRequest.last_name, req.user.email]
     );
@@ -86,19 +89,31 @@ export class UserService {
   }
 
   static async updateProfileImage(req, request){
-    const image = request ? `images/${req.user.id}-${request.filename}` : null
+    const image = request ? `uploads/${request.filename}` : null
 
-    const [rows, field] = await dbPool.query(
+    if(!request){
+      throw new ResponseError(400,102, "Format Image tidak sesuai")
+    }
+
+    const imageOld = await dbPool.query(`SELECT profile_image FROM users WHERE email = ?`, [req.user.email])
+
+    const [rows] = await dbPool.query(
       `UPDATE users SET profile_image = ? WHERE email = ?`,
       [image, req.user.email]
     );
     if (!rows) {
       throw new ResponseError(500, "Update profile failed");
     }
+    fs.unlink(`./public/${imageOld[0][0].profile_image}`, (err) => {
+      if (err) {
+        logging.debug(err)
+      }
+      logging.debug('File deleted successfully');
+    })
 
     const result = await dbPool.query(`SELECT email, first_name, last_name, profile_image FROM users WHERE email = ?`, [req.user.email])
 
-    // console.log(result[0][0])
+    result[0][0].profile_image = `${config.BASE_URL}/${result[0][0].profile_image}`
 
     return result[0][0]
   }

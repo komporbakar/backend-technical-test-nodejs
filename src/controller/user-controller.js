@@ -5,7 +5,7 @@ export class UserController {
     static async register(req, res, next){
         try {
             const request = req.body
-            const response = await UserService.register(request)
+            await UserService.register(request)
             return res.status(200).json({
                 status: 0,
                 message: "Registrasi berhasil silahkan login",

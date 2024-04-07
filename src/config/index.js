@@ -2,6 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 export const config = {
+    BASE_URL: process.env.BASE_URL || 'http://localhost:3000',
     PORT: process.env.PORT || 3000,
     DB: process.env.DB || 'mysql',
     DB_HOST: process.env.DB_HOST || 'localhost',

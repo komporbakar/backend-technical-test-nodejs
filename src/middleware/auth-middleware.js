@@ -9,7 +9,7 @@ export const authenticate = async(req, res, next) => {
             token = authorization.split(' ')[1]
         }
         if(!token){
-           res.status(401).json({
+          return res.status(401).json({
             status: 108,
             message: 'Token tidak tidak valid atau kadaluwarsa',
             data: null
@@ -23,7 +23,8 @@ export const authenticate = async(req, res, next) => {
 
         next()
     } catch (error) {
-        res.status(401).json({
+        next(error)
+       return  res.status(401).json({
             status: 108,
             message: 'Token tidak tidak valid atau kadaluwarsa',
             data: null

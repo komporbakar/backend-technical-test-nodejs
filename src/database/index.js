@@ -9,13 +9,5 @@ export const dbPool =  mysql.createPool({
     database: config.DB_NAME
 }).promise();
 
-// try {
-//     const [results, fields] = await connection.query('SELECT * FROM `users` WHERE `email` = ?',['test12@gmail.com'])
-// console.log(
-//     results
-// )
-// } catch (error) {
-//     console.log(error)
-// }
 
 
