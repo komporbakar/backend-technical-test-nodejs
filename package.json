@@ -2,6 +2,7 @@
   "name": "take-home-test-nodejs",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "src/index.js",
   "scripts": {
     "test": "jest --forceExit",

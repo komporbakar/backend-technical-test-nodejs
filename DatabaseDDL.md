@@ -17,7 +17,7 @@ CREATE TABLE `users` (
 	`password` VARCHAR(256) NOT NULL,
 	`profile_image` VARCHAR(256) NULL DEFAULT NULL,
 	PRIMARY KEY (`id`)
-)
+);
 ```
 
 - ### Create Table Balance
@@ -29,7 +29,7 @@ CREATE TABLE `balance` (
 	`amount` INT(20) NOT NULL,
 	PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
-)
+);
 ```
 
 - ### Create Table Banner
@@ -41,7 +41,7 @@ CREATE TABLE `banner` (
 	`banner_image` VARCHAR(256) NOT NULL,
 	`description` VARCHAR(256) NOT NULL,
 	PRIMARY KEY (`id`)
-)
+);
 ```
 
 - ### Create Table Services
@@ -54,7 +54,7 @@ CREATE TABLE `services` (
 	`service_icon` VARCHAR(256) NOT NULL,
 	`service_tariff` INT(20) NOT NULL,
 	PRIMARY KEY (`id`)
-)
+);
 ```
 
 - ### Create Table Transaction
@@ -70,5 +70,5 @@ CREATE TABLE `transaction` (
 	`created_on` TIMESTAMP(6) NULL DEFAULT NULL,
 	PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
-)
+);
 ```
