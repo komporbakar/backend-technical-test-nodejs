@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --forceExit",
     "start": "nodemon --exec babel-node src/index.js",
-    "build": "npm-run-all clean transpile"
+    "build": "babel src -d lib"
   },
   "babel": {
     "presets": [
@@ -16,7 +16,6 @@
   "author": "arif nurrohman",
   "license": "ISC",
   "dependencies": {
-    "@babel/cli": "^7.24.1",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
@@ -31,6 +30,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@babel/cli": "^7.24.1",
     "@babel/core": "^7.24.4",
     "@babel/node": "^7.23.9",
     "@babel/preset-env": "^7.24.4",

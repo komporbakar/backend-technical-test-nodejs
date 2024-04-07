@@ -19,7 +19,7 @@ app.use(publicRouter)
 app.use(router)
 app.use(errorMiddleware)
 
-app.use((req, res) => {
+app.use('*', async(req, res) => {
    return res.status(404).json({
         status: 404,
         message: 'Not Found',
