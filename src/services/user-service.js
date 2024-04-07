@@ -68,7 +68,7 @@ export class UserService {
         email: rows[0].email,
         first_name: rows[0].first_name,
         last_name: rows[0].last_name,
-        profile_image: `${config.BASE_URL}/${rows[0].profile_image}`
+        profile_image: rows[0].profile_image ? `${config.BASE_URL}/${rows[0].profile_image}` : null
       }
 
       return data
@@ -113,7 +113,7 @@ export class UserService {
 
     const result = await dbPool.query(`SELECT email, first_name, last_name, profile_image FROM users WHERE email = ?`, [req.user.email])
 
-    result[0][0].profile_image = `${config.BASE_URL}/${result[0][0].profile_image}`
+    result[0][0].profile_image = result[0][0].profile_image ? `${config.BASE_URL}/${result[0][0].profile_image}` : null
 
     return result[0][0]
   }
