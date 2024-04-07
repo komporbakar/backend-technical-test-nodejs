@@ -1,0 +1,40 @@
+{
+  "name": "take-home-test-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest --forceExit",
+    "start": "nodemon --exec babel-node src/index.js",
+    "build": "npm-run-all clean transpile"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "author": "arif nurrohman",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/cli": "^7.24.1",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.9.3",
+    "rimraf": "^5.0.5",
+    "supertest": "^6.3.4",
+    "winston": "^3.13.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.4",
+    "@babel/node": "^7.23.9",
+    "@babel/preset-env": "^7.24.4",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.0"
+  }
+}
