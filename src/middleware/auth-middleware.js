@@ -1,4 +1,3 @@
-import { ResponseError } from "../error/response-error";
 import { verifyJWT } from "../utils/jsonWebToken";
 
 export const authenticate = async(req, res, next) => {
@@ -10,7 +9,11 @@ export const authenticate = async(req, res, next) => {
             token = authorization.split(' ')[1]
         }
         if(!token){
-           throw new ResponseError(401, 108, 'Token tidak tidak valid atau kadaluwarsa')
+           res.status(401).json({
+            status: 108,
+            message: 'Token tidak tidak valid atau kadaluwarsa',
+            data: null
+        })
         }
         const payload = verifyJWT({token})
         req.user = {
@@ -23,6 +26,8 @@ export const authenticate = async(req, res, next) => {
         res.status(401).json({
             status: 108,
             message: 'Token tidak tidak valid atau kadaluwarsa',
+            data: null
         })
     }
 }
+

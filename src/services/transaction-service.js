@@ -104,12 +104,12 @@ export class TrasnsactionService {
     const limit = request.limit;
     const offset = request.offset;
     const result = await dbPool.query(
-      `SELECT invoice_number, transaction_type, description, total_amount FROM transaction WHERE user_id = ? ${
+      `SELECT invoice_number, transaction_type, description, total_amount, created_on FROM transaction WHERE user_id = ? ${
         limit ? `LIMIT ${limit}` : ""
       } ${offset ? `OFFSET ${offset}` : ""} `,
       [req.user.id]
     );
-    console.log(result[0]);
+    console.log(result[0].length);
     result[0].offset = offset;
     return result[0];
   }
