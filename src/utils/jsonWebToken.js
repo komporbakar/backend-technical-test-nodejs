@@ -16,4 +16,11 @@ export const createJWT = ({payload}) => {
 }
 
 
-export const verifyJWT = ({token}) => jwt.verify(token, config.JWT_SECRET)
+export const verifyJWT = ({token}) => {
+    try {
+        const decoded = jwt.verify(token, config.JWT_SECRET)
+        return decoded
+    } catch (error) {
+        return null
+    }
+}

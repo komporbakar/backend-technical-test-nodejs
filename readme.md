@@ -19,9 +19,9 @@
 ## Running Unit Test
 
 ```raw
-  npm test test/member.js
+  npm test test/member.test.js
 
-  npm test test/information.js
+  npm test test/information.test.js
 
-  npm test test/transaction.js
+  npm test test/transaction.test.js
 ```

@@ -14,15 +14,15 @@ app.use("/uploads", express.static(path.join(__dirname, "../public/uploads")));
 
 app.use(publicRouter);
 app.use(router);
-
-app.use('*', async (req, res) => {
+app.use(errorMiddleware);
+app.use('*',  (req, res) => {
   return res.status(404).json({
     status: 404,
     message: "Not Found",
     data: null,
   });
 })
-app.use(errorMiddleware);
+
 
 
 app.listen(config.PORT, (err) => {
